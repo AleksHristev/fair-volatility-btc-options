@@ -1,0 +1,89 @@
+instruments:
+  expiry_hour_utc: 8
+  tick_size: 0.0001
+  tick_size_steps:
+    - {above_price: 0.005, tick_size: 0.0005}
+
+pricing:
+  default_day_count: 365.0
+  iv_bounds: [0.01, 10.0]
+
+forward:
+  identified_abs_delta: [0.25, 0.75]
+  lookback_minutes: 60
+
+buckets:
+  expiry_days:
+    edges: [0.0, 1.0, 7.0, 30.0, 90.0, .inf]
+    labels: ["<1d", "1-7d", "7-30d", "30-90d", ">90d"]
+  abs_delta:
+    edges: [0.0, 0.15, 0.40, 0.60, 1.0000001]
+    labels: ["wing", "OTM", "ATM", "ITM"]
+
+flags:
+  tick_noise_max_volpts: 1.0
+
+impact:
+  last_trade_max_age_minutes: 60
+
+markout:
+  max_lookforward_multiple: 2.0
+
+filter:
+  x_clamp: 6.0
+  atm_vol_floor: 10.0
+  tau_ref_days: 30.0
+  tau_floor_days: 0.041666666666666664
+  init_sd_level: 10.0
+  init_sd_other: 5.0
+  burn_in_updates: 20
+  wing_knot: 2.0
+  tick_noise_cap: 1.0e4
+  v_floor: 1.0e-12
+  cov_approximation: "factor"
+  bases: ["Q", "H", "HW"]
+  residual_options: [false, true]
+  spot_options: [false, true]
+  weightings: ["F0", "F1"]
+  ml:
+    maxiter: 200
+    ftol: 1.0e-13
+    gtol: 1.0e-9
+    restarts: 1
+    coord_check_step: 0.1
+    coord_check_max_rounds: 5
+    fd_step: 1.0e-4
+    checkpoint_cpu_seconds: 300
+  start:
+    q_level: 1.0
+    q_slope: 0.25
+    q_curv: 0.25
+    q_wing: 0.25
+    alpha: 0.5
+    s2_e: 1.0
+    s2_b: 0.25
+    kappa: 1.0
+    s2_u: 0.25
+    gamma: 0.5
+    beta: 0.0
+    s2_block: 1.0
+    s2_combo: 1.0
+  bounds:
+    q: [1.0e-6, 1.0e3]
+    alpha: [0.0, 2.0]
+    s2: [1.0e-6, 1.0e3]
+    kappa: [1.0e-3, 1.0e3]
+    gamma: [-1.0, 2.0]
+    beta: [-500.0, 500.0]
+  beta_scale: 100.0
+
+benchmarks2:
+  min_strikes_quadratic: 3
+
+learned:
+  horizon_minutes: 30
+  index_windows_minutes: [5, 30]
+  flow_windows_minutes: [5, 30]
+  tsl_cap_minutes: 10080
+  flow_scale_usd: 10000.0
+  near_expiry_days: 0.5
